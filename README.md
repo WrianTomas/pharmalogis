@@ -66,34 +66,3 @@ El primer arranque crea la cuenta si no existe. Las ejecuciones posteriores no c
 Para otro servidor, configurar `DB_URL`, por ejemplo `jdbc:mysql://localhost:3306/pharmalogis_iam?serverTimezone=America/Lima`.
 
 Alternativa si ya se dispone de Docker: definir `MYSQL_ROOT_PASSWORD` y `DB_PASSWORD` localmente y ejecutar `docker compose up -d`. El volumen conserva los datos; el script inicial solo se aplica al crear un volumen nuevo. Docker no es necesario para la instalación con MSI.
-
-## Verificación y entrega
-
-```powershell
-cd system
-.\mvnw.cmd test
-.\mvnw.cmd package
-java -jar target/system-0.0.1-SNAPSHOT.jar --spring.profiles.active=demo
-```
-
-Se aprobaron 22 pruebas con H2 y una adicional con MySQL real. Se comprobó el flujo MVC, seguridad, persistencia JPA, validaciones, CRUD e idempotencia; además, las consultas y el reinicio de una instancia temporal acreditaron la conservación de datos en MySQL. Los resultados y capturas se encuentran en `docs/evidencias/`. MySqlIntegrationTests se activa con RUN_MYSQL_TESTS=true y credenciales locales; se omite en ejecuciones sin MySQL.
-
-- Informe: [Word del avance 3](docs/PharmaLogis_Informe_Integrado_Avance3.docx).
-- Especificaciones: [docs/casos-de-uso.md](docs/casos-de-uso.md).
-- UML: [docs/diagramas](docs/diagramas).
-- Pruebas y pasos para MySQL: [docs/pruebas.md](docs/pruebas.md).
-- Evidencias: [docs/evidencias](docs/evidencias).
-
-## Trabajo en equipo
-
-Cada integrante debe clonar el repositorio y crear su propia configuración de MySQL. Las credenciales locales no se incluyen. Para probar sin instalar MySQL se puede usar el perfil `demo` indicado arriba.
-
-Antes de cambiar el código, crear una rama con `git switch -c nombre-del-cambio`. Subir la rama y abrir un pull request para revisar los cambios antes de incorporarlos a `main`.
-
-## Reglas de esta iteración
-
-DNI de 8 dígitos y correo únicos; departamentos y turnos con nombre único; turnos del mismo día y tolerancia de 0 a 60 minutos. Una falta implica ausencia de marcaciones; una cantidad impar implica asistencia incompleta. La tardanza se determina después de la tolerancia y se cuenta desde el inicio del turno. El tiempo trabajado suma pares entrada/salida, sin incluir descansos entre pares. No se generan horas extras.
-
-Importar y recalcular no duplica resultados. Los empleados inactivos se excluyen de nuevos cálculos; su historial permanece. Se impide borrar departamentos/turnos asignados y empleados con marcaciones/asistencias. Todos los cambios web requieren CSRF y rol ADMIN o RRHH. Las credenciales se almacenan con BCrypt.
-
-Pendiente de futuras iteraciones: turnos nocturnos, calendario laboral, vacaciones/feriados, fecha de alta y baja, justificaciones, historial de asignaciones, auditoría, paginación, proveedor biométrico real y automatización. Los cálculos históricos usan la asignación actual; la demo académica no implementa nómina.
