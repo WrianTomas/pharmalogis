@@ -1,0 +1,6 @@
+Prueba de persistencia MySQL tras reiniciar una instancia independiente de Spring Boot.
+Fecha local: 2026-10-23 21:21:50
+Puerto de verificación: 8081. La instancia del usuario en 8080 permanece en ejecución.
+Arranque 1: esquema validado; login correcto; cuatro empleados y estados de asistencia recuperados desde MySQL.
+Arranque 2: esquema validado; login correcto; cuatro empleados y estados de asistencia recuperados desde MySQL.
+Resultado: APROBADO. Los resultados se conservaron al cerrar y reiniciar el proceso Java de verificación.

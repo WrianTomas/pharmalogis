@@ -1,0 +1,21 @@
+# Configuración y credenciales locales
+.local/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*credential*.xml
+
+# Compilación y registros
+system/target/
+*.log
+*.dump
+*.dumpstream
+
+# Configuración del IDE y entregas comprimidas
+system/.idea/
+*.iml
+entrega/
+Thumbs.db
+.DS_Store

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head th:fragment="head(title)">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title th:text="${title} + ' · PharmaLogis'">
+            PharmaLogis
+        </title>
+        <link rel="stylesheet" th:href="@{/css/app.css}">
+    </head>
+    <body>
+        <aside th:fragment="nav(active)" class="sidebar">
+            <a class="brand" th:href="@{/}">
+                <span class="brand-icon">
+                    P
+                    <span>
+                        +
+                    </span>
+                </span>
+                <span>
+                    PharmaLogis
+                    <small>
+                        GESTIÓN DE ASISTENCIA
+                    </small>
+                </span>
+            </a>
+            <p class="nav-label">
+                ESPACIO DE TRABAJO
+            </p>
+            <nav aria-label="Navegación principal">
+                <a th:href="@{/attendance}" th:classappend="${active=='attendance'?'selected':''}">
+                    <span>
+                        ◷
+                    </span>
+                    Asistencias
+                </a>
+                <a th:href="@{/employees}" th:classappend="${active=='employees'?'selected':''}">
+                    <span>
+                        ♙
+                    </span>
+                    Empleados
+                </a>
+                <a th:href="@{/departments}" th:classappend="${active=='departments'?'selected':''}">
+                    <span>
+                        ▦
+                    </span>
+                    Departamentos
+                </a>
+                <a th:href="@{/shifts}" th:classappend="${active=='shifts'?'selected':''}">
+                    <span>
+                        ◴
+                    </span>
+                    Turnos
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <strong>
+                    Tu equipo, a tiempo.
+                </strong>
+                <p>
+                    Control diario para una operación conectada.
+                </p>
+                <form th:action="@{/logout}" method="post">
+                    <button class="logout" type="submit">
+                        Cerrar sesión ↗
+                    </button>
+                </form>
+            </div>
+        </aside>
+        <div th:fragment="messages" aria-live="polite">
+            <p class="alert success" th:if="${success}" th:text="${success}">
+            </p>
+            <p class="alert danger" th:if="${error}" th:text="${error}">
+            </p>
+        </div>
+        <div th:fragment="errors" th:if="${#fields.hasAnyErrors()}" class="alert danger" role="alert">
+            <strong>
+                Revisa los datos del formulario
+            </strong>
+            <ul>
+                <li th:each="err:${#fields.allErrors()}" th:text="${err}">
+                </li>
+            </ul>
+        </div>
+    </body>
+</html>

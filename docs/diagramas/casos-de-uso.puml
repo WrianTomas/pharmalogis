@@ -1,0 +1,30 @@
+@startuml
+!pragma layout smetana
+left to right direction
+actor "Administrador" as Admin
+actor "Recursos Humanos" as HR
+rectangle "PharmaLogis — Primera iteración" {
+ usecase "CU-IAM-01\nIniciar sesión" as Login
+ usecase "CU-RHH-01\nGestionar turnos" as Shifts
+ usecase "CU-RHH-02\nGestionar departamentos" as Departments
+ usecase "CU-RHH-03\nGestionar empleados" as Employees
+ usecase "CU-RHH-08\nImportar marcaciones simuladas" as Import
+ usecase "CU-SYS-01\nCalcular asistencia diaria (manual)" as Calculate
+ usecase "CU-RHH-05\nConsultar asistencias" as Query
+}
+Admin --> Login
+Admin --> Shifts
+Admin --> Departments
+Admin --> Employees
+Admin --> Import
+Admin --> Calculate
+Admin --> Query
+HR --> Login
+HR --> Shifts
+HR --> Departments
+HR --> Employees
+HR --> Import
+HR --> Calculate
+HR --> Query
+note bottom of Calculate : Todos los casos de gestión requieren\nsesión ADMIN o RRHH y CSRF en escrituras.\nLa importación y el cálculo se disparan manualmente.
+@enduml

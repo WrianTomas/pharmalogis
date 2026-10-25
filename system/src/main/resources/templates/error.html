@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments::head('Revisar solicitud')}">
+    </head>
+    <body>
+        <main class="error-page">
+            <span class="eyebrow">
+                PHARMALOGIS
+            </span>
+            <h1>
+                No pudimos completar la solicitud
+            </h1>
+            <p th:text="${message?:'Revise los datos y sus permisos de acceso.'}">
+            </p>
+            <a class="primary" th:href="@{/}">
+                Volver al inicio
+            </a>
+        </main>
+    </body>
+</html>

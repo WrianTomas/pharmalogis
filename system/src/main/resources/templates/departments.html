@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments::head('Departamentos')}">
+    </head>
+    <body>
+        <aside th:replace="~{fragments::nav('departments')}">
+        </aside>
+        <main class="workspace">
+            <header class="topbar">
+                <span>
+                    Organización / Departamentos
+                </span>
+                <span class="workspace-badge">
+                    PharmaLogis · RRHH
+                </span>
+            </header>
+            <div class="page-content">
+                <span class="eyebrow">
+                    ESTRUCTURA ORGANIZACIONAL
+                </span>
+                <h1>
+                    Departamentos
+                </h1>
+                <p class="muted">
+                    Organiza las áreas que hacen posible cada entrega.
+                </p>
+                <div th:replace="~{fragments::messages}">
+                </div>
+                <div class="split">
+                    <section class="panel">
+                        <div class="panel-heading">
+                            <h2>
+                                Áreas del equipo
+                            </h2>
+                            <span class="count" th:text="${#lists.size(departments)}">
+                                0
+                            </span>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Departamento
+                                        </th>
+                                        <th>
+                                            Descripción
+                                        </th>
+                                        <th>
+                                            Acciones
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="d:${departments}">
+                                        <td>
+                                            <strong th:text="${d.name}">
+                                            </strong>
+                                        </td>
+                                        <td th:text="${d.description}">
+                                        </td>
+                                        <td>
+                                            <div class="actions">
+                                                <a th:href="@{/departments/{id}/edit(id=${d.id})}">
+                                                    Editar
+                                                </a>
+                                                <form th:action="@{/departments/{id}/delete(id=${d.id})}" method="post" onsubmit="return confirm('¿Eliminar este departamento?')">
+                                                    <button class="danger-link">
+                                                        Eliminar
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(departments)}">
+                                        <td colspan="3" class="empty">
+                                            Todavía no hay departamentos. Registra el primero.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                    <section class="panel form-panel">
+                        <span class="eyebrow">
+                            DEPARTAMENTO
+                        </span>
+                        <h2 th:text="${form.id==null?'Crear departamento':'Editar departamento'}">
+                        </h2>
+                        <form th:action="@{/departments}" method="post" th:object="${form}">
+                            <div th:replace="~{fragments::errors}">
+                            </div>
+                            <input type="hidden" th:field="*{id}">
+                            <label for="name">
+                                Nombre
+                                <span>
+                                    *
+                                </span>
+                            </label>
+                            <input th:field="*{name}" required maxlength="100" placeholder="Ej. Logística">
+                            <label for="description">
+                                Descripción
+                            </label>
+                            <textarea th:field="*{description}" maxlength="250" rows="3" placeholder="Función del departamento">
+                            </textarea>
+                            <button class="primary full" type="submit">
+                                Guardar departamento
+                            </button>
+                            <a class="cancel" th:href="@{/departments}" th:if="${form.id!=null}">
+                                Cancelar edición
+                            </a>
+                        </form>
+                    </section>
+                </div>
+                <p class="footnote">
+                    Los departamentos con empleados asignados están protegidos contra eliminación.
+                </p>
+            </div>
+        </main>
+    </body>
+</html>

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments::head('Iniciar sesión')}">
+    </head>
+    <body class="login-page">
+        <main class="login-grid">
+            <section class="login-story">
+                <a class="brand" href="/login">
+                    <span class="brand-icon">
+                        P+
+                    </span>
+                    PharmaLogis
+                </a>
+                <span class="eyebrow">
+                    PERSONAS · TIEMPO · OPERACIÓN
+                </span>
+                <h1>
+                    Cada jornada
+                    <br>
+                    cuenta.
+                </h1>
+                <p>
+                    La asistencia de tu equipo, organizada en un solo lugar.
+                </p>
+                <div class="story-line">
+                </div>
+                <small>
+                    GESTIÓN DE ASISTENCIA / PHARMALOGIS
+                </small>
+            </section>
+            <section class="login-card">
+                <span class="eyebrow">
+                    BIENVENIDO A TU ESPACIO
+                </span>
+                <h2>
+                    Iniciar sesión
+                </h2>
+                <p class="muted">
+                    Ingresa con tu cuenta de administración o RRHH.
+                </p>
+                <p th:if="${param.error}" class="alert danger" role="alert">
+                    Correo o contraseña incorrectos, o cuenta inactiva.
+                </p>
+                <p th:if="${param.logout}" class="alert success">
+                    Sesión cerrada correctamente.
+                </p>
+                <form th:action="@{/login}" method="post">
+                    <label for="email">
+                        Correo electrónico
+                    </label>
+                    <input id="email" type="email" name="email" placeholder="nombre@pharmalogis.pe" autocomplete="username" required autofocus>
+                    <label for="password">
+                        Contraseña
+                    </label>
+                    <input id="password" type="password" name="password" autocomplete="current-password" required>
+                    <button class="primary full" type="submit">
+                        Entrar al sistema
+                        <span>
+                            →
+                        </span>
+                    </button>
+                </form>
+                <small class="muted">
+                    Acceso exclusivo para personal autorizado.
+                </small>
+            </section>
+        </main>
+    </body>
+</html>

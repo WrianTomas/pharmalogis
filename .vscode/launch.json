@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "PharmaLogis: demostración (H2)",
+            "request": "launch",
+            "mainClass": "com.pharmalogis.system.SystemApplication",
+            "projectName": "system",
+            "args": "--spring.profiles.active=demo",
+            "cwd": "${workspaceFolder}/system"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Iniciar Chrome para localhost",
+            "url": "http://localhost:8080",
+            "webRoot": "${workspaceFolder}"
+        }
+    ]
+}

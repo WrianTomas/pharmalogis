@@ -1,0 +1,115 @@
+@startuml
+!pragma layout smetana
+hide empty members
+class UserEntity {
+UUID id
+String email
+String encodedPassword
+Role role
+UserStatus status
+}
+class Department {
+Long id
+String name
+String description
+}
+class Shift {
+Long id
+String name
+LocalTime startTime
+LocalTime endTime
+int toleranceMinutes
+}
+class Employee {
+Long id
+String document
+String fullName
+String email
+Long departmentId
+Long shiftId
+boolean active
+}
+interface OrganizationRepository {
+ departments()
+shifts()
+employees()
+ save(Department)
+save(Shift)
+save(Employee)
+ deleteDepartment(id)
+deleteShift(id)
+deleteEmployee(id)
+}
+class JpaOrganizationRepository
+class OrganizationService {
+save(value)
+deleteDepartment(id)
+deleteShift(id)
+deleteEmployee(id)
+}
+class DepartmentEntity
+class ShiftEntity
+class EmployeeEntity
+class ExternalMarkationEntity {
+Long id
+String employeeDocument
+LocalDateTime occurredAt
+}
+class MarkationEntity {
+Long id
+Long externalId
+LocalDateTime occurredAt
+}
+class AttendanceEntity {
+Long id
+LocalDate workDate
+String status
+int lateMinutes
+int workedMinutes
+String incidents
+}
+class AttendancePolicy {
+calculate(date, start, end, tolerance, marks): Result
+}
+class CalculateAttendanceHandler {
+handle(Command): int
+}
+class ImportMarkationsHandler {
+handle(Command): Result
+}
+class GetAttendanceHandler {
+handle(Query): List<Row>
+}
+class DatabaseUserDetailsService {
+loadUserByUsername(email): UserDetails
+}
+class OrganizationController
+class AttendanceController
+Department "1" <-- "0..*" Employee : departmentId
+Shift "1" <-- "0..*" Employee : shiftId
+DepartmentEntity "1" <-- "0..*" EmployeeEntity
+ShiftEntity "1" <-- "0..*" EmployeeEntity
+EmployeeEntity "1" <-- "0..*" MarkationEntity
+EmployeeEntity "1" <-- "0..*" AttendanceEntity
+ExternalMarkationEntity "1" <-- "0..1" MarkationEntity : externalId (FK SQL)
+OrganizationRepository <|.. JpaOrganizationRepository
+JpaOrganizationRepository ..> DepartmentEntity
+JpaOrganizationRepository ..> ShiftEntity
+JpaOrganizationRepository ..> EmployeeEntity
+JpaOrganizationRepository ..> Department : mapea
+JpaOrganizationRepository ..> Shift : mapea
+JpaOrganizationRepository ..> Employee : mapea
+OrganizationController --> OrganizationService
+OrganizationService --> OrganizationRepository
+AttendanceController --> CalculateAttendanceHandler
+AttendanceController --> ImportMarkationsHandler
+AttendanceController --> GetAttendanceHandler
+CalculateAttendanceHandler --> AttendancePolicy
+CalculateAttendanceHandler ..> EmployeeEntity
+CalculateAttendanceHandler ..> MarkationEntity
+CalculateAttendanceHandler ..> AttendanceEntity
+ImportMarkationsHandler ..> ExternalMarkationEntity
+ImportMarkationsHandler ..> MarkationEntity
+GetAttendanceHandler ..> AttendanceEntity
+DatabaseUserDetailsService ..> UserEntity
+@enduml

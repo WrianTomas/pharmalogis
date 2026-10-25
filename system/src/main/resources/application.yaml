@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: system
+
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/pharmalogis_iam?serverTimezone=America/Lima}
+    username: ${DB_USERNAME:pharmalogis}
+    password: ${DB_PASSWORD:pharmalogis_dev}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8080
+
+jwt:
+  secret: ${JWT_SECRET:dev-only-secret-key-7f3a9c2e8b1d5f6a4c0e9b7d2a8f1c6e}
+  expiration: ${JWT_EXPIRATION:900000}

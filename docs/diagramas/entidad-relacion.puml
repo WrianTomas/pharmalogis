@@ -1,0 +1,61 @@
+@startuml
+!pragma layout smetana
+entity iam_users {
+* id : BINARY(16) <<PK>>
+ email : VARCHAR(255) <<UQ>>
+ encoded_password : VARCHAR(255)
+ role : VARCHAR(30)
+ status : VARCHAR(30)
+}
+entity departments {
+* id : BIGINT <<PK>>
+ name : VARCHAR(100) <<UQ>>
+ description : VARCHAR(250)
+}
+entity shifts {
+* id : BIGINT <<PK>>
+ name : VARCHAR(100) <<UQ>>
+ start_time : TIME
+ end_time : TIME
+ tolerance_minutes : INT
+}
+entity employees {
+* id : BIGINT <<PK>>
+ document : VARCHAR(8) <<UQ>>
+ email : VARCHAR(150) <<UQ>>
+ full_name : VARCHAR(150)
+ department_id : BIGINT <<FK>>
+ shift_id : BIGINT <<FK>>
+ active : BOOLEAN
+}
+entity markations_from_external_provider {
+* id : BIGINT <<PK>>
+ employee_document : VARCHAR(8)
+ occurred_at : DATETIME(6)
+}
+entity markations {
+* id : BIGINT <<PK>>
+ external_id : BIGINT <<FK,UQ>>
+ employee_id : BIGINT <<FK>>
+ occurred_at : DATETIME(6)
+}
+entity attendances {
+* id : BIGINT <<PK>>
+ employee_id : BIGINT <<FK>>
+ work_date : DATE
+ first_in : DATETIME(6)
+ last_out : DATETIME(6)
+ status : VARCHAR(20)
+ late_minutes : INT
+ worked_minutes : INT
+ incidents : VARCHAR(250)
+}
+departments ||--o{ employees
+shifts ||--o{ employees
+employees ||--o{ markations
+employees ||--o{ attendances
+markations_from_external_provider ||--o| markations
+note bottom of markations : UNIQUE(employee_id, occurred_at)
+note bottom of attendances : UNIQUE(employee_id, work_date)
+note bottom of iam_users : Cuenta de acceso independiente\ndel registro organizacional del empleado.
+@enduml

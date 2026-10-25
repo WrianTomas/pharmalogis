@@ -1,0 +1,41 @@
+@startuml
+actor RRHH
+boundary "attendance.html" as View
+control AttendanceController as Controller
+control CalculateAttendanceHandler as Handler
+entity EmployeeJpaRepository as Employees
+entity MarkationJpaRepository as Marks
+entity AttendancePolicy as Policy
+entity AttendanceJpaRepository as Rows
+database MySQL
+RRHH -> View : Seleccionar fecha y calcular
+View -> Controller : POST /attendance/calculate (fecha + CSRF)
+Controller -> Handler : handle(Command(fecha))
+activate Handler
+Handler -> Handler : Validar fecha no futura
+group transacción
+Handler -> Employees : findAll()
+Employees -> MySQL : SELECT empleados y turnos
+MySQL --> Employees : datos
+Employees --> Handler : empleados
+loop cada empleado activo
+ Handler -> Marks : buscar marcaciones del día
+ Marks -> MySQL : SELECT por empleado e intervalo
+ MySQL --> Marks : marcaciones
+ Marks --> Handler : instantes
+ Handler -> Policy : calculate(fecha, turno, tolerancia, marcas)
+ Policy --> Handler : Result(estado, minutos, incidencias)
+ Handler -> Rows : findByEmployeeIdAndWorkDate(...)
+ Rows -> MySQL : SELECT resumen existente
+ Handler -> Rows : saveAndFlush(resumen nuevo/actualizado)
+ Rows -> MySQL : INSERT o UPDATE
+end
+end
+Handler --> Controller : cantidad procesada (commit)
+deactivate Handler
+Controller --> View : redirect /attendance?date=... + mensaje
+View -> Controller : GET /attendance
+Controller --> View : HTML renderizado con resultados
+View --> RRHH : Tabla e indicadores
+note right of Handler : Si falla una escritura, rollback.\nFecha futura: BusinessException.\nUnicidad empleado/fecha evita duplicados.
+@enduml

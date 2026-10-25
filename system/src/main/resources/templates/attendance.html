@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments::head('Asistencias')}">
+    </head>
+    <body>
+        <aside th:replace="~{fragments::nav('attendance')}">
+        </aside>
+        <main class="workspace">
+            <header class="topbar">
+                <span>
+                    Control diario / Asistencias
+                </span>
+                <span class="workspace-badge">
+                    PharmaLogis · RRHH
+                </span>
+            </header>
+            <div class="page-content">
+                <div class="page-heading">
+                    <div>
+                        <span class="eyebrow">
+                            CADA JORNADA CUENTA
+                        </span>
+                        <h1>
+                            Panel de asistencias
+                        </h1>
+                        <p class="muted">
+                            Una mirada clara a la jornada de tu equipo.
+                        </p>
+                    </div>
+                    <span class="date-badge" th:text="${#temporals.format(date,'dd / MM / yyyy')}">
+                    </span>
+                </div>
+                <div th:replace="~{fragments::messages}">
+                </div>
+                <div class="stats">
+                    <article>
+                        <span>
+                            Puntuales
+                        </span>
+                        <strong th:text="${present}">
+                        </strong>
+                        <small class="teal">
+                            Dentro de la tolerancia
+                        </small>
+                    </article>
+                    <article>
+                        <span>
+                            Tardanzas
+                        </span>
+                        <strong th:text="${late}">
+                        </strong>
+                        <small>
+                            Entrada fuera de tolerancia
+                        </small>
+                    </article>
+                    <article>
+                        <span>
+                            Faltas
+                        </span>
+                        <strong th:text="${absent}">
+                        </strong>
+                        <small>
+                            Sin marcaciones registradas
+                        </small>
+                    </article>
+                    <article>
+                        <span>
+                            Incompletas
+                        </span>
+                        <strong th:text="${incomplete}">
+                        </strong>
+                        <small>
+                            Requieren revisión
+                        </small>
+                    </article>
+                </div>
+                <section class="workflow panel">
+                    <div>
+                        <span class="eyebrow">
+                            PROCESAR JORNADA
+                        </span>
+                        <h2>
+                            Del registro al resultado
+                        </h2>
+                        <p class="muted">
+                            1. Selecciona la fecha · 2. Importa las marcaciones · 3. Calcula la asistencia
+                        </p>
+                    </div>
+                    <div class="actions">
+                        <form th:action="@{/attendance/import}" method="post">
+                            <input type="hidden" name="date" th:value="${date}">
+                            <button class="secondary">
+                                ↓ Importar marcaciones
+                            </button>
+                        </form>
+                        <form th:action="@{/attendance/calculate}" method="post">
+                            <input type="hidden" name="date" th:value="${date}">
+                            <button class="primary">
+                                Calcular asistencia →
+                            </button>
+                        </form>
+                    </div>
+                </section>
+                <section class="panel">
+                    <div class="panel-heading">
+                        <h2>
+                            Detalle de la jornada
+                        </h2>
+                        <span class="count" th:text="${#lists.size(rows)}+' registros'">
+                        </span>
+                    </div>
+                    <form class="filters" th:action="@{/attendance}" method="get">
+                        <div>
+                            <label for="date">
+                                Fecha de jornada
+                            </label>
+                            <input type="date" name="date" id="date" th:value="${date}" required>
+                        </div>
+                        <div>
+                            <label for="employeeId">
+                                Empleado
+                            </label>
+                            <select name="employeeId" id="employeeId">
+                                <option value="">
+                                    Todo el equipo
+                                </option>
+                                <option th:each="e:${employees}" th:value="${e.id}" th:text="${e.fullName}" th:selected="${employeeId==e.id}">
+                                </option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="status">
+                                Estado
+                            </label>
+                            <select name="status" id="status">
+                                <option value="">
+                                    Todos los estados
+                                </option>
+                                <option th:each="s:${ {'PRESENTE','TARDANZA','FALTA','INCOMPLETA'} }" th:value="${s}" th:text="${s}" th:selected="${status==s}">
+                                </option>
+                            </select>
+                        </div>
+                        <button class="secondary">
+                            Consultar
+                        </button>
+                    </form>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Empleado
+                                    </th>
+                                    <th>
+                                        Departamento
+                                    </th>
+                                    <th>
+                                        Entrada
+                                    </th>
+                                    <th>
+                                        Salida
+                                    </th>
+                                    <th>
+                                        Estado
+                                    </th>
+                                    <th>
+                                        Tardanza
+                                    </th>
+                                    <th>
+                                        Trabajo
+                                    </th>
+                                    <th>
+                                        Incidencias
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="r:${rows}">
+                                    <td>
+                                        <strong th:text="${r.employee}">
+                                        </strong>
+                                        <small th:text="${r.document}">
+                                        </small>
+                                    </td>
+                                    <td th:text="${r.department}">
+                                    </td>
+                                    <td th:text="${r.firstIn==null?'—':#temporals.format(r.firstIn,'HH:mm')}">
+                                    </td>
+                                    <td th:text="${r.lastOut==null?'—':#temporals.format(r.lastOut,'HH:mm')}">
+                                    </td>
+                                    <td>
+                                        <span class="pill" th:classappend="${r.status}" th:text="${r.status}">
+                                        </span>
+                                    </td>
+                                    <td th:text="${r.lateMinutes}+' min'">
+                                    </td>
+                                    <td th:text="${r.workedMinutes}+' min'">
+                                    </td>
+                                    <td class="incidents" th:text="${r.incidents.isBlank()?'Sin incidencias':r.incidents}">
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(rows)}">
+                                    <td colspan="8" class="empty">
+                                        <strong>
+                                            No hay resultados para esta consulta.
+                                        </strong>
+                                        <p>
+                                            Importa y calcula la jornada seleccionada, o ajusta los filtros.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <p class="footnote">
+                    Los indicadores reflejan los filtros de la consulta. Las operaciones de importación y cálculo procesan la fecha completa.
+                </p>
+            </div>
+        </main>
+    </body>
+</html>

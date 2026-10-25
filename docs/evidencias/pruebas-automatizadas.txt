@@ -1,0 +1,16 @@
+﻿-------------------------------------------------------------------------------
+Test set: com.pharmalogis.system.AttendancePolicyTests
+-------------------------------------------------------------------------------
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.105 s -- in com.pharmalogis.system.AttendancePolicyTests
+-------------------------------------------------------------------------------
+Test set: com.pharmalogis.system.MySqlIntegrationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.635 s -- in com.pharmalogis.system.MySqlIntegrationTests
+-------------------------------------------------------------------------------
+Test set: com.pharmalogis.system.SystemApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.795 s -- in com.pharmalogis.system.SystemApplicationTests
+-------------------------------------------------------------------------------
+Test set: com.pharmalogis.system.WorkflowTests
+-------------------------------------------------------------------------------
+Tests run: 13, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.029 s -- in com.pharmalogis.system.WorkflowTests
